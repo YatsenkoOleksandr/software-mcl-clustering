@@ -1,0 +1,48 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2018
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DecompostionSoftwareGUI", "DecompostionSoftware\DecompostionSoftwareGUI.csproj", "{D2F0B730-A61F-497F-9DF2-545B6A92D0F9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClusteringEntities", "ClusteringEntities\ClusteringEntities.csproj", "{F781271E-A3DA-4F3E-92B7-17B5B11F2F0B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCLClustering", "MCLClustering\MCLClustering.csproj", "{9F6FC52F-8155-4A42-8571-FFBCC3F2B2F4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleTest", "ConsoleTest\ConsoleTest.csproj", "{80FC20CF-C375-4A18-8298-4111A9B4E544}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E8E88D9D-17C9-44DF-8AC8-9F2302A248A8}"
+	ProjectSection(SolutionItems) = preProject
+		JGrokScript\JavaProgramMetadataExtractionScript.jgrok = JGrokScript\JavaProgramMetadataExtractionScript.jgrok
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D2F0B730-A61F-497F-9DF2-545B6A92D0F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2F0B730-A61F-497F-9DF2-545B6A92D0F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2F0B730-A61F-497F-9DF2-545B6A92D0F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2F0B730-A61F-497F-9DF2-545B6A92D0F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F781271E-A3DA-4F3E-92B7-17B5B11F2F0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F781271E-A3DA-4F3E-92B7-17B5B11F2F0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F781271E-A3DA-4F3E-92B7-17B5B11F2F0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F781271E-A3DA-4F3E-92B7-17B5B11F2F0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F6FC52F-8155-4A42-8571-FFBCC3F2B2F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F6FC52F-8155-4A42-8571-FFBCC3F2B2F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F6FC52F-8155-4A42-8571-FFBCC3F2B2F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F6FC52F-8155-4A42-8571-FFBCC3F2B2F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80FC20CF-C375-4A18-8298-4111A9B4E544}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80FC20CF-C375-4A18-8298-4111A9B4E544}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80FC20CF-C375-4A18-8298-4111A9B4E544}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80FC20CF-C375-4A18-8298-4111A9B4E544}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A2C6AB6B-1A03-41FB-8ED1-6F07EB247178}
+	EndGlobalSection
+EndGlobal

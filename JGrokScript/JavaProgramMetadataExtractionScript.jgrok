@@ -1,0 +1,192 @@
+// Parameters to script:
+// $1 - input *.TA file
+// $2 - output *.jgrok.out file
+
+// Load input *.TA file
+getta($1);
+
+// Empty set - result of extraction
+EntityRelationsResult = eset;
+
+// Set of program classes
+classInstances = $INSTANCE . {"$C"};
+
+// Set of program interfaces
+interfaceInstances = $INSTANCE . {"$I"};
+
+// Set of program methods
+methodInstances = $INSTANCE . {"$M"};
+
+// Get contain relations "class"->"[child entity]"
+classContainRelations = classInstances * contain
+
+// Get class contains class relation
+classContainClassRelations = classContainRelations * classInstances
+//classContainClassRelations
+
+EntityRelationsResult = EntityRelationsResult + classContainClassRelations;
+
+// Get relation "method"->"[parent class]"
+methodParentClassesRelations = methodInstances * inv classContainRelations
+// Get relation "[parent class]->[child method]"
+parentClassMethodRelation = inv methodParentClassesRelations
+
+//"-- METHOD->PARENT CLASS --"
+//methodParentClassesRelations
+//"-- PARENT CLASS->METHOD --"
+//parentClassMethodRelation
+
+// Get set of existed entity relations with relation description
+existedRelations = relnames [&0 =~ "\\$_E.*"]
+
+"EXISED RELATIONS:"
+existedRelations;
+
+for rel in existedRelations
+{
+	relationName = rel;
+	// Some tuples hava format "$[EntityType]"->"$[EntityType]"
+	// To show what kinds of instances are used in relation
+	relations = $relationName;
+	relationMetadata = relations [&0 =~ "\\$.*" ];	
+	
+	relationsWithoutMetadata = relations - relationMetadata;
+	
+	entityTypeFrom = relationMetadata [&0];
+	entityTypeIn = relationMetadata [&1];	
+	
+	// Assumed, that only one tuple "$[EntityType]"->"$[EntityType]" in relation
+	if (#entityTypeFrom == 1 && #entityTypeIn == 1)
+	{		
+		entityTypeNameFrom = pick(entityTypeFrom);
+		entityTypeNameIn = pick(entityTypeIn);	
+		//entityTypeNameFrom;
+		//entityTypeNameIn;
+		//entityTypeNameFrom == "$C";
+		//entityTypeNameIn == "$C";
+		
+		
+		if ((entityTypeNameFrom == "$C" || entityTypeNameFrom == "$I")
+			&& (entityTypeNameIn == "$C" || entityTypeNameIn == "$I"))
+		{
+			"-- Relation class/interface->class/interface --"
+			//relationsWithoutMetadata;
+			// Just add to result set
+			EntityRelationsResult = EntityRelationsResult + relationsWithoutMetadata;
+		}
+				
+		if (entityTypeNameFrom == "$M" && entityTypeNameIn == "$C")
+		{
+			"--- Relation method->class ---"
+			//relationsWithoutMetadata;
+			
+			// We need to composite method parent class with referenced class
+			parentClassWithReferencedClassRelation = parentClassMethodRelation * relationsWithoutMetadata;
+			
+			//"--- Parent class with referenced class ---"
+			//parentClassWithReferencedClassRelation;
+			
+			EntityRelationsResult = EntityRelationsResult + parentClassWithReferencedClassRelation;
+		}
+		
+		if (entityTypeNameFrom == "$M" && entityTypeNameIn == "$M")
+		{
+			"--- Relation method->method ---"
+			//relationsWithoutMetadata;
+			
+			// We need to composite method parent class with referenced method parent class
+			
+			// [parent class of method from]-> method in
+			parentClassMethodFrom = parentClassMethodRelation * relationsWithoutMetadata;
+			
+			//"[parent class of method from]-> method in"
+			//parentClassMethodFrom;
+			
+			// method from -> method in -> [parent class of method in]
+			methodParentClassIn = relationsWithoutMetadata ** methodParentClassesRelations;
+			//"method from -> method in -> [parent class of method in]"
+			//methodParentClassIn;
+			// method in -> [parent class of method in]
+			methodParentClassIn = methodParentClassIn [&1, &2];
+			//"method in -> [parent class of method in]"
+			//methodParentClassIn;
+			
+			//[parent class of method from] -> [parent class of method in]
+			classRelations = parentClassMethodFrom * methodParentClassIn;
+			
+			//"[parent class of method from] -> [parent class of method in]"
+			//classRelations;
+			
+			EntityRelationsResult = EntityRelationsResult + classRelations;
+		}
+	}
+	
+	
+	"---- NEXT RELATION ----";
+}
+
+"-- NON LABELED RESULT --";
+EntityRelationsResult;
+
+// Remove synthetic objects
+
+//entity -> y
+syntethicEntities = @synthetic;
+
+// entity From -> entity In -> synthetic In
+entityFromSyntheticIn = EntityRelationsResult ** syntethicEntities;
+
+// entity from -> syntethic entity in
+entityFromSyntheticIn = entityFromSyntheticIn [&0, &1];
+"Synthetic entities in to remove"
+entityFromSyntheticIn
+
+EntityRelationsResult = EntityRelationsResult - entityFromSyntheticIn;
+
+// synthetic From -> entity From -> entity In
+syntheticFromEntityFromEntityIn = (inv syntethicEntities) ** EntityRelationsResult;
+
+// synthetic entity from -> entity in
+syntheticFromEntityIn = syntheticFromEntityFromEntityIn [&1, &2];
+
+"Synthetic entities from to remove"
+syntheticFromEntityIn;
+
+EntityRelationsResult = EntityRelationsResult - syntheticFromEntityIn;
+
+// Change generated entity name to label
+
+// entity -> label
+entityLabelRelation = @label;
+
+// label -> entity
+labelEntityRelation = inv @label;
+
+// entity from -> entityIn -> Label In
+entityFromEntityInLabelIn = EntityRelationsResult ** entityLabelRelation;
+
+// entity In -> label In
+entityInLabelIn = entityFromEntityInLabelIn [&1, &2];
+
+// label from -> entity In
+labelFromEntityIn = labelEntityRelation * EntityRelationsResult;
+
+labeledEntities = labelFromEntityIn * entityInLabelIn;
+
+"LABELED RESULT"
+labeledEntities;
+
+ootbJavaEntities = labeledEntities [&0 =~ "java\\..*" || &1 =~ "java\\..*"];
+
+ootbJavaEntities = ootbJavaEntities + (labeledEntities [&0 =~ "javax\\..*" || &1 =~ "javax\\..*"]);
+
+labeledEntities = labeledEntities - ootbJavaEntities;
+
+"ENTITIIES WITHOUT SYSTEM CLASSES"
+labeledEntities;
+
+// Save result into file
+writeDot($2, labeledEntities);
+
+
+

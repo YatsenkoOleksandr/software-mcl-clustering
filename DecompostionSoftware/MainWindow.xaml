@@ -1,0 +1,28 @@
+﻿<Window x:Class="DecompostionSoftware.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DecompostionSoftware"
+        mc:Ignorable="d"
+        Title="Software Decomposition based on Cluster Analysis" Height="345" Width="608">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="167*"/>
+            <RowDefinition Height="148*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0*"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Button x:Name="decomposeButton" Content="Decompose" Margin="0,0,10,10" Click="Button_Click" HorizontalAlignment="Right" Width="75" Height="26" VerticalAlignment="Bottom" Grid.Column="1" Grid.Row="1"/>
+        <RichTextBox x:Name="textBoxOutput" Margin="21,30,108,10" Grid.Column="1" Grid.RowSpan="2" IsReadOnly="True">
+            <FlowDocument>
+                <Paragraph>
+                    <Run Text=""/>
+                </Paragraph>
+            </FlowDocument>
+        </RichTextBox>
+
+    </Grid>
+</Window>
